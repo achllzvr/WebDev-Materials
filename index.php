@@ -53,6 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <?php
 
+include("connections.php");
+
     if ($name && $address && $email) {
 
         echo $name . "<br>";
