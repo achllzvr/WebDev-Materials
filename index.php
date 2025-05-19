@@ -1,9 +1,13 @@
 <!-- Start of PHP field initializations -->
 <?php
 
+// Connects with php file for connection
+// Including connections.php will make sure that everything in connections.php will be inherited into index.php
+include("connections.php");
+
 // Initializes fields as blank
-$name = $address = $email = "";
-$nameErr = $addressErr = $emailErr = "";
+$name = $address = $email = $password = $account_type ="";
+$nameErr = $addressErr = $emailErr = $account_typeErr = $passwordErr = "";
 
 // POST Request
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -29,25 +33,101 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $_POST["email"];
     }
 
+    // If password is empty, require password
+    if (empty ($_POST["password"])) {
+        $passwordErr = "Password is required!";
+    } else {
+        $password = $_POST["password"];
+    }
+
+    // if confirm_password is empty, require confirm_password
+    if (empty ($_POST["confirm_password"])) {
+        $confirm_passwordErr = "Confirm Password is required!";
+    } else {
+        $confirm_password = $_POST["confirm_password"];
+    }
+
+    // If account_type is empty, require account_type
+    if (empty ($_POST["account_type"])) {
+        $account_typeErr = "Account Type is required!";
+    } else {
+        $account_type = $_POST["account_type"];
+    }
+
+    // When name, address, email has values...
+    if ($name && $address && $email && $password && $confirm_password) {
+
+        // EMAIL VALIDATION -------------------------------------------------------------------------------------------------
+
+        // Check if email already exists in database
+        $check_email = mysqli_query($connections, "SELECT * FROM users WHERE email='$email'");
+
+        // and grab the data from row in database
+        $check_email_row = mysqli_num_rows($check_email);
+
+        // If email already exists, show error message
+        if($check_email_row > 0){
+
+            $emailErr = "Email already exists!";
+
+        // If email is available, insert data into database
+        } else {
+
+            $query = mysqli_query($connections, "
+                INSERT INTO users(
+                    name,
+                    address,
+                    email,
+                    password,
+                    account_type
+                )
+
+                VALUES(
+                    '$name',
+                    '$address',
+                    '$email',
+                    '$password',
+                    '$account_type'
+                )
+            ");
+
+            // INSERT INTO prepares the table 'users' and its columns 'name', 'address', and 'email' for data insertion
+            /* VALUES will insert the values for those columns based on the parameters seen on the start of our
+                    IF statement which are the values of the fields in our FORM
+            */
+
+            // This will create a pop up for in the page that will show that a new record has been recorded
+            echo "<script language='javascript'> alert('New Record has been inserted!'); </script>";
+            // Then proceeds to reload the file/ page
+            echo "<script>window.location.href='index.php';</script>";
+
+        }
+
+    }
+
 }
 
 ?>
-<!-- End of PHP field initializations -->
+<!-- End of PHP field initializations  ----------------------------------------------------------------------------------->
 
 
-<!-- Start of STYLES -->
+<!-- Start of STYLES ------------------------------------------------------------------------------------------------->
 <style>
 
 /* Error Text Color Style */
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .error { 
      color:red;
 }
    
 </style>
-<!-- End of STYLES -->
+<!-- End of STYLES ------------------------------------------------------------------------------------------------->
 
 
-<!-- Start of NAV -->
+<!-- Start of NAV ------------------------------------------------------------------------------------------------->
 
 <?php
 
@@ -56,78 +136,87 @@ include("nav.php");
 
 ?>
 
-<!-- End of NAV -->
+<!-- End of NAV ------------------------------------------------------------------------------------------------->
 
 
-<!-- Start of FORM -->
+<!-- Start of FORM ------------------------------------------------------------------------------------------------->
 <form method="POST" action="<?php htmlspecialchars ("PHP_SELF"); ?>">
+<br>
 
 <!-- Name input field | name as id, type as text -->
-<input type="text" name= "name" value="<?php echo $name; ?>"> <br>
+Name: <input type="text" name= "name" placeholder="Enter your name" value="<?php echo $name; ?>"> <br>
 <!-- Error echo for error messages -->
 <span class="error"><?php echo $nameErr; ?> </span> <br>
 
 <!-- address input field | address as id, type as text -->
-<input type="text" name= "address" value="<?php echo $address; ?>"> <br>
+Address: <input type="text" name= "address" placeholder="Enter your Address" value="<?php echo $address; ?>"> <br>
 <!-- Error echo for error messages -->
 <span class="error"><?php echo $addressErr; ?> </span> <br>
 
 <!-- email input field | email as id, type as text -->
-<input type="text" name= "email" value="<?php echo $email; ?>"> <br>
+Email: <input type="text" name= "email" placeholder="Enter your Email" value="<?php echo $email; ?>"> <br>
 <!-- Error echo for error messages -->
 <span class="error"><?php echo $emailErr; ?> </span> <br>
+
+<!-- password input field | password as id, type as text -->
+Password: <input type="password" name= "password" placeholder="Enter your Password" value="<?php echo $password; ?>"> <br>
+<!-- Error echo for error messages -->
+<span class="error"><?php echo $passwordErr; ?> </span> <br>
+
+<!-- confirm password input field | confirm_password as id, type as text -->
+Confirm Password: <input type="password" name= "confirm_password" placeholder="Confirm Password" value="<?php echo $confirm_password; ?>"> <br>
+<!-- Error echo for error messages -->
+<span class="error"><?php echo $confirm_passwordErr; ?> </span> <br>
 
 <!-- Submit button -->
 <input type="submit" name="Submit">
 
 </form>
-<!-- End of FORM -->
+<!-- End of FORM ------------------------------------------------------------------------------------------------->
 
 
 <!-- Horizontal Line -->
 <hr>
 
 
-<!-- Queries -->
+<!-- Queries ------------------------------------------------------------------------------------------------->
 <?php
 
-// Connects with php file for connection
-// Including connections.php will make sure that everything in connections.php will be inherited into index.php
 include("connections.php");
 
-    // DATA INSERTION AND DISPLAYING
-    // When name, address, email has values...
-    if ($name && $address && $email) {
+    /* DATA INSERTION -----------------------------------------------------------------------------------------------
 
-        // Start a query for handling and connect with database
-        // $connections is to connect to the $connections variable in connections.php to connect the file to the database
+    // Start a query for handling and connect with database
+    // $connections is to connect to the $connections variable in connections.php to connect the file to the database
 
-        //This query will insert the name, address, and email into the database corresponding columns
-        $query = mysqli_query($connections, "
-            INSERT INTO users(
-                name,
-                address,
-                email
-            )
+    //This query will insert the name, address, and email into the database corresponding columns
+    $query = mysqli_query($connections, "
+        INSERT INTO users(
+            name,
+            address,
+            email
+        )
 
-            VALUES(
-                '$name',
-                '$address',
-                '$email'
-            )
-        ");
+        VALUES(
+            '$name',
+            '$address',
+            '$email'
+        )
+    ");
 
-        // INSERT INTO prepares the table 'users' and its columns 'name', 'address', and 'email' for data insertion
-        /* VALUES will insert the values for those columns based on the parameters seen on the start of our
-                IF statement which are the values of the fields in our FORM
-        */
+    // INSERT INTO prepares the table 'users' and its columns 'name', 'address', and 'email' for data insertion
+    /* VALUES will insert the values for those columns based on the parameters seen on the start of our
+            IF statement which are the values of the fields in our FORM
 
-        // This will create a pop up for in the page that will show that a new record has been recorded
-        echo "<script language='javascript'> alert('New Record has been inserted!'); </script>";
-        // Then proceeds to reload the file/ page
-        echo "<script>window.location.href='index.php';</script>";
+    // This will create a pop up for in the page that will show that a new record has been recorded
+    echo "<script language='javascript'> alert('New Record has been inserted!'); </script>";
+    // Then proceeds to reload the file/ page
+    echo "<script>window.location.href='index.php';</script>";
 
-    }
+    */
+
+
+    // DATA VIEWING -----------------------------------------------------------------------------------------------
 
     // Creates a variable named 'view_query'
     // This selects all data from the 'users' table
@@ -173,10 +262,11 @@ include("connections.php");
     echo "</table>";
 
 ?>
+<!-- End of Queries ------------------------------------------------------------------------------------------------->
 
 <hr>
 
-<!-- FOR EACH -->
+<!-- FOR EACH  ------------------------------------------------------------------------------------------------->
 <?php
 
 // Initialize Variables
