@@ -47,6 +47,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- End of STYLES -->
 
 
+<!-- Start of NAV -->
+
+<?php
+
+// Include Nav (NavBar file) in the main file (index.php)
+include("nav.php");
+
+?>
+
+<!-- End of NAV -->
+
 
 <!-- Start of FORM -->
 <form method="POST" action="<?php htmlspecialchars ("PHP_SELF"); ?>">
