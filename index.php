@@ -81,15 +81,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php
 
 // Connects with php file for connection
+// Including connections.php will make sure that everything in connections.php will be inherited into index.php
 include("connections.php");
 
     // When name, address, email has values...
     if ($name && $address && $email) {
 
-        // ...Echo results
-        echo $name . "<br>";
-        echo $address . "<br>";
-        echo $email . "<br>";
+        // Start a query for handling and connect with database
+        // $connections is to connect to the $connections variable in connections.php to connect the file to the database
+
+        //This query will insert the name, address, and email into the database corresponding columns
+        $query = mysqli_query($connections, "
+            INSERT INTO users(
+                name,
+                address,
+                email
+            )
+
+            VALUES(
+                '$name',
+                '$address',
+                '$email'
+            )
+        ");
+
+        // INSERT INTO prepares the table 'users' and its columns 'name', 'address', and 'email' for data insertion
+        /* VALUES will insert the values for those columns based on the parameters seen on the start of our
+                IF statement which are the values of the fields in our FORM
+        */
 
     }
 
