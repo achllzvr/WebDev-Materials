@@ -15,14 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $name = $_POST["name"];
     }
 
-    // If address is empty, require name
+    // If address is empty, require address
     if (empty ($_POST["address"])) {
         $addressErr = "Address is required!";
     } else {
         $address = $_POST["address"];
     }
 
-    // If email is empty, require name
+    // If email is empty, require email
     if (empty ($_POST["email"])) {
         $emailErr = "Email is required!";
     } else {
@@ -110,6 +110,38 @@ include("connections.php");
                 IF statement which are the values of the fields in our FORM
         */
 
+        // This will create a pop up for in the page that will show that a new record has been recorded
+        echo "<script language='javascript'› window.alert('New Record has been inserted!'); </script>";
+        // Then proceeds to reload the file/ page
+        echo "<script>window.location.href='index.php';</script>";
+
     }
+
+    // Creates a variable named 'view_query'
+    // This selects all data from the 'users' table
+    $view_query = mysqli_query($connections, "SELECT * FROM users");
+
+    // Start of a Table
+    echo "<table border='1' width='50%'>";
+
+    // While loop that will continue to loop as long as there is an existing row from the data fetched
+    while($row = mysqli_fetch_assoc($view_query)){
+
+        // The data fetched per row will be stored in these three corresponding variables
+        $db_name = $row["name"];
+        $db_address = $row["address"];
+        $db_email = $row["email"];
+
+        // Echo the fetched data per row into the table
+        echo "<tr>
+                <td>$db_name</td>
+                <td>$db_address</td>
+                <td>$db_email</td>
+            </tr>";
+
+    }
+
+    // End of Table
+    echo "</table>";
 
 ?>
