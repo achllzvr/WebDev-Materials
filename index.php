@@ -151,7 +151,7 @@ include("connections.php");
                 <td>
                 <a href='edit.php?id=$db_id'>Update</a>
                 &nbsp;
-                <a href=''>Delete</a>
+                <a href='confirm_delete.php?id=$db_id'>Delete</a>
                 </td>
 
             </tr>";
