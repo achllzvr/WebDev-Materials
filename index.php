@@ -1,3 +1,4 @@
+<!-- Start of PHP field initializations -->
 <?php
 
 // Initializes fields as blank
@@ -31,7 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 ?>
+<!-- End of PHP field initializations -->
 
+
+<!-- Start of STYLES -->
 <style>
 
 /* Error Text Color Style */
@@ -40,8 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
    
 </style>
+<!-- End of STYLES -->
 
-<!-- Start of Form -->
+
+
+<!-- Start of FORM -->
 <form method="POST" action="<?php htmlspecialchars ("PHP_SELF"); ?>">
 
 <!-- Name input field | name as id, type as text -->
@@ -63,8 +70,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <input type="submit" name="Submit">
 
 </form>
-<!-- End of Form -->
+<!-- End of FORM -->
 
+
+<!-- Horizontal Line -->
 <hr>
 
 
