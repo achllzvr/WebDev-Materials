@@ -77,13 +77,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <hr>
 
 
-<!-- Database Connection -->
+<!-- Queries -->
 <?php
 
 // Connects with php file for connection
 // Including connections.php will make sure that everything in connections.php will be inherited into index.php
 include("connections.php");
 
+    // DATA INSERTION AND DISPLAYING
     // When name, address, email has values...
     if ($name && $address && $email) {
 
@@ -111,7 +112,7 @@ include("connections.php");
         */
 
         // This will create a pop up for in the page that will show that a new record has been recorded
-        echo "<script language='javascript'› window.alert('New Record has been inserted!'); </script>";
+        echo "<script language='javascript'> alert('New Record has been inserted!'); </script>";
         // Then proceeds to reload the file/ page
         echo "<script>window.location.href='index.php';</script>";
 
@@ -123,11 +124,19 @@ include("connections.php");
 
     // Start of a Table
     echo "<table border='1' width='50%'>";
+    echo "<tr>
+                <td>Names:</td>
+                <td>Address:</td>
+                <td>Email:</td>
+
+                <td>Option</td>
+            </tr>";
 
     // While loop that will continue to loop as long as there is an existing row from the data fetched
     while($row = mysqli_fetch_assoc($view_query)){
 
-        // The data fetched per row will be stored in these three corresponding variables
+        // The data fetched per row will be stored in these four corresponding variables
+        $db_id = $row["id"];
         $db_name = $row["name"];
         $db_address = $row["address"];
         $db_email = $row["email"];
@@ -137,6 +146,14 @@ include("connections.php");
                 <td>$db_name</td>
                 <td>$db_address</td>
                 <td>$db_email</td>
+
+                
+                <td>
+                <a href='edit.php?id=$db_id'>Update</a>
+                &nbsp;
+                <a href=''>Delete</a>
+                </td>
+
             </tr>";
 
     }
