@@ -162,3 +162,24 @@ include("connections.php");
     echo "</table>";
 
 ?>
+
+<hr>
+
+<!-- FOR EACH -->
+<?php
+
+// Initialize Variables
+$fn = "Chi";
+$ln = "Rab";
+
+// Initialize Array and its content
+$names = array("$fn","$ln");
+
+// For each loop where $display_names is the array $names
+foreach($names as $display_names){
+
+    // Echo all display names concatenating with a break line
+    echo $display_names . "<br>";
+}
+
+?>
